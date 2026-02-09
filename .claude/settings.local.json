@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__plugin_claude-mem_mcp-search__search",
+      "WebSearch",
+      "WebFetch(domain:law.moj.gov.tw)",
+      "WebFetch(domain:www.ey.gov.tw)",
+      "mcp__plugin_claude-mem_mcp-search__get_observations",
+      "Bash(dir:*)",
+      "Bash(ls \"D:\\\\Code\\\\公司法\\\\05-股份有限公司\"\" 2>nul || echo \"Directory does not exist \")",
+      "Bash(python:*)",
+      "Bash(for:*)",
+      "Bash(\"D:/Code/公司法/09-附則/README.md\" << 'EOF'\n# 第九章 附則\n\n> 公司法施行日期與過渡條款。\n\n## 條文列表\n\n| 條號 | 檔案 | 狀態 |\n|------|------|------|\n| 第 447 條 | [art-447.md]\\(./art-447.md\\) | active |\n| 第 448 條 | [art-448.md]\\(./art-448.md\\) | active |\n| 第 449 條 | [art-449.md]\\(./art-449.md\\) | active |\n\n共 3 條\n\n---\n\n> 回到 [主目錄]\\(../README.md\\)\nEOF)",
+      "Bash(do if [ -f \"$f\" ])",
+      "Bash(then echo \"$f EXISTS\")",
+      "Bash(else echo \"$f NOT_FOUND\")",
+      "Bash(fi)",
+      "Bash(done)",
+      "Bash(do if [ -f \"D:/Code/公司法/01-總則/$f\" ])",
+      "Bash(then echo \"OK: $f\")",
+      "Bash(else echo \"MISSING: $f\")",
+      "Bash(python3:*)",
+      "Bash(where:*)",
+      "Bash(git init:*)"
+    ]
+  }
+}
