@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>公司法知識庫</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div id="app">
+        <header>
+            <div class="header-left">
+                <h1>公司法知識庫</h1>
+            </div>
+            <div class="header-right">
+                <div class="mode-toggle" id="modeToggle">
+                    <button class="mode-btn" data-mode="search">搜尋</button>
+                    <button class="mode-btn active" data-mode="ai">AI</button>
+                </div>
+            </div>
+        </header>
+
+        <main id="chatArea">
+            <div id="welcome" class="welcome">
+                <div class="welcome-icon">&#9878;</div>
+                <h2>公司法知識庫助手</h2>
+                <p>輸入問題或關鍵字，查詢台灣公司法相關內容</p>
+                <div class="suggestions">
+                    <button class="suggestion-btn" onclick="askQuestion('什麼是股份有限公司？')">什麼是股份有限公司？</button>
+                    <button class="suggestion-btn" onclick="askQuestion('第 1 條')">第 1 條</button>
+                    <button class="suggestion-btn" onclick="askQuestion('董事的責任有哪些？')">董事的責任有哪些？</button>
+                    <button class="suggestion-btn" onclick="askQuestion('公司設立流程')">公司設立流程</button>
+                    <button class="suggestion-btn" onclick="askQuestion('股東會的召集程序')">股東會的召集程序</button>
+                    <button class="suggestion-btn" onclick="askQuestion('有限公司和股份有限公司的差別')">有限公司 vs 股份有限公司</button>
+                </div>
+            </div>
+            <div id="messages"></div>
+        </main>
+
+        <footer>
+            <form id="chatForm">
+                <input type="text" id="chatInput" placeholder="輸入問題，例如：第 23 條、董事責任、公司設立..." autocomplete="off">
+                <button type="submit" id="sendBtn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+                    </svg>
+                </button>
+            </form>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="/static/app.js"></script>
+</body>
+</html>

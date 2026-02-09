@@ -1,0 +1,7 @@
+flask>=3.0
+python-frontmatter>=1.1
+markdown>=3.5
+whoosh>=2.7
+jieba>=0.42
+openai>=1.0
+python-dotenv>=1.0

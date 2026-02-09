@@ -1,0 +1,6 @@
+chatbot/index_data/
+chatbot/__pycache__/
+chatbot/.env
+__pycache__/
+*.pyc
+nul
