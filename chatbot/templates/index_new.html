@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>台灣法律知識系統 - AI 智能助手</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style_new.css">
+</head>
+<body>
+    <!-- Scroll Progress Indicator -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <div id="app">
+        <!-- Enhanced Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="header-left">
+                    <div class="logo">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                            <rect width="32" height="32" rx="8" fill="url(#logo-gradient)"/>
+                            <path d="M16 8L20 12H18V20H20L16 24L12 20H14V12H12L16 8Z" fill="white"/>
+                            <defs>
+                                <linearGradient id="logo-gradient" x1="0" y1="0" x2="32" y2="32">
+                                    <stop offset="0%" stop-color="#667eea"/>
+                                    <stop offset="100%" stop-color="#764ba2"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                        <div class="logo-text">
+                            <h1>台灣法律知識系統</h1>
+                            <span class="logo-subtitle">AI Legal Assistant</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <button class="header-btn" id="themeToggle" title="切換深色模式">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                        </svg>
+                    </button>
+                    <button class="header-btn" id="historyBtn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M12 6v6l4 2"/>
+                        </svg>
+                        歷史
+                    </button>
+                    <button class="header-btn" id="bookmarksBtn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+                        </svg>
+                        收藏
+                    </button>
+                    <button class="header-btn" id="exportBtn" title="匯出對話記錄">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="7 10 12 15 17 10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        匯出
+                    </button>
+                    <button class="header-btn" id="statsBtn" title="使用統計">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="20" x2="12" y2="10"/>
+                            <line x1="18" y1="20" x2="18" y2="4"/>
+                            <line x1="6" y1="20" x2="6" y2="16"/>
+                        </svg>
+                        統計
+                    </button>
+                    <div class="mode-toggle" id="modeToggle">
+                        <button class="mode-btn" data-mode="search">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"/>
+                                <path d="M21 21l-4.35-4.35"/>
+                            </svg>
+                            搜尋
+                        </button>
+                        <button class="mode-btn active" data-mode="ai">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                                <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
+                            </svg>
+                            AI 助手
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main id="chatArea">
+            <!-- Welcome Screen -->
+            <div id="welcome" class="welcome">
+                <div class="welcome-hero">
+                    <div class="hero-badge">
+                        <span class="badge-icon">🤖</span>
+                        <span>AI 驅動</span>
+                    </div>
+                    <h2 class="hero-title">您的專業法律知識助手</h2>
+                    <p class="hero-subtitle">基於台灣公司法全文，提供精準的 AI 法律諮詢服務</p>
+
+                    <div class="stats-bar">
+                        <div class="stat-item">
+                            <div class="stat-number" id="statDocs">564</div>
+                            <div class="stat-label">法律文件</div>
+                        </div>
+                        <div class="stat-divider"></div>
+                        <div class="stat-item">
+                            <div class="stat-number">24/7</div>
+                            <div class="stat-label">全天服務</div>
+                        </div>
+                        <div class="stat-divider"></div>
+                        <div class="stat-item">
+                            <div class="stat-number">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+                                </svg>
+                            </div>
+                            <div class="stat-label">AI 潤詞</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feature Cards -->
+                <div class="feature-grid">
+                    <div class="feature-card" data-feature="qa">
+                        <div class="feature-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                            </svg>
+                        </div>
+                        <h3>智能問答</h3>
+                        <p>AI 自動優化問題，提供精準的法律解答</p>
+                    </div>
+
+                    <div class="feature-card" data-feature="search">
+                        <div class="feature-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"/>
+                                <path d="M21 21l-4.35-4.35"/>
+                            </svg>
+                        </div>
+                        <h3>條文搜索</h3>
+                        <p>快速查找特定法條，支援關鍵字檢索</p>
+                    </div>
+
+                    <div class="feature-card" data-feature="judgments">
+                        <div class="feature-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>
+                            </svg>
+                        </div>
+                        <h3>判決書查詢</h3>
+                        <p>查詢司法院判決書，分析實務見解</p>
+                    </div>
+
+                    <div class="feature-card" data-feature="compare">
+                        <div class="feature-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                <path d="M9 11l3 3L22 4"/>
+                                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+                            </svg>
+                        </div>
+                        <h3>法條對比</h3>
+                        <p>比較不同版本或相關法條的差異</p>
+                    </div>
+                </div>
+
+                <!-- Quick Questions -->
+                <div class="quick-questions">
+                    <h3 class="quick-title">💡 熱門問題</h3>
+                    <div class="question-tags">
+                        <button class="question-tag" onclick="askQuestion('什麼是股份有限公司？')">
+                            <span class="tag-icon">📊</span>
+                            股份有限公司
+                        </button>
+                        <button class="question-tag" onclick="askQuestion('董事的責任有哪些？')">
+                            <span class="tag-icon">👔</span>
+                            董事責任
+                        </button>
+                        <button class="question-tag" onclick="askQuestion('公司設立流程')">
+                            <span class="tag-icon">🏢</span>
+                            公司設立
+                        </button>
+                        <button class="question-tag" onclick="askQuestion('股東會的召集程序')">
+                            <span class="tag-icon">👥</span>
+                            股東會
+                        </button>
+                        <button class="question-tag" onclick="askQuestion('有限公司和股份有限公司的差別')">
+                            <span class="tag-icon">⚖️</span>
+                            公司類型比較
+                        </button>
+                        <button class="question-tag" onclick="askQuestion('公司解散清算')">
+                            <span class="tag-icon">📋</span>
+                            解散清算
+                        </button>
+                        <button class="question-tag" onclick="askQuestion('查詢第156條相關判決')">
+                            <span class="tag-icon">⚖️</span>
+                            第156條判決
+                        </button>
+                        <button class="question-tag" onclick="askQuestion('公司法第23條董事忠實義務')">
+                            <span class="tag-icon">🎯</span>
+                            董事忠實義務
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Advanced Search Filters -->
+            <div class="search-filters" id="searchFilters">
+                <div class="filter-header">
+                    <div class="filter-title">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+                        </svg>
+                        進階篩選
+                    </div>
+                    <button class="filter-close" onclick="toggleFilters()">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="filter-section">
+                    <label class="filter-label">章節</label>
+                    <div class="filter-options" id="chapterFilters">
+                        <button class="filter-chip" data-chapter="總則">總則</button>
+                        <button class="filter-chip" data-chapter="無限公司">無限公司</button>
+                        <button class="filter-chip" data-chapter="有限公司">有限公司</button>
+                        <button class="filter-chip" data-chapter="兩合公司">兩合公司</button>
+                        <button class="filter-chip" data-chapter="股份有限公司">股份有限公司</button>
+                        <button class="filter-chip" data-chapter="關係企業">關係企業</button>
+                        <button class="filter-chip" data-chapter="外國公司">外國公司</button>
+                        <button class="filter-chip" data-chapter="登記">登記</button>
+                    </div>
+                </div>
+
+                <div class="filter-section">
+                    <label class="filter-label">搜索範圍</label>
+                    <div class="filter-options" id="scopeFilters">
+                        <button class="filter-chip active" data-scope="all">全部</button>
+                        <button class="filter-chip" data-scope="legal_text">條文原文</button>
+                        <button class="filter-chip" data-scope="explanation">白話解說</button>
+                    </div>
+                </div>
+
+                <div class="filter-section">
+                    <label class="filter-label">條文狀態</label>
+                    <div class="filter-options" id="statusFilters">
+                        <button class="filter-chip active" data-status="active">現行</button>
+                        <button class="filter-chip" data-status="deleted">已刪除</button>
+                    </div>
+                </div>
+
+                <div class="filter-actions">
+                    <button class="filter-btn filter-btn-secondary" onclick="resetFilters()">重置</button>
+                    <button class="filter-btn filter-btn-primary" onclick="applyFilters()">套用篩選</button>
+                </div>
+            </div>
+
+            <!-- Messages Container -->
+            <div id="messages"></div>
+        </main>
+
+        <!-- Enhanced Input Area -->
+        <footer class="footer">
+            <div class="input-container">
+                <form id="chatForm">
+                    <button type="button" class="filter-toggle-btn" id="filterToggleBtn" onclick="toggleFilters()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+                        </svg>
+                        <span>篩選</span>
+                    </button>
+                    <div class="input-wrapper">
+                        <textarea
+                            id="chatInput"
+                            placeholder="輸入您的法律問題，AI 將自動優化並提供專業解答..."
+                            rows="1"
+                            autocomplete="off"
+                        ></textarea>
+                        <button type="submit" id="sendBtn" class="send-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="input-footer">
+                        <div class="input-hint">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+                            </svg>
+                            AI 模式下將自動優化您的問題
+                        </div>
+                        <div class="input-actions">
+                            <button type="button" class="action-btn" id="clearBtn" title="清除對話">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </footer>
+
+        <!-- Scroll to Top Button -->
+        <button class="scroll-to-top" id="scrollToTop" title="回到頂部">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 15l-6-6-6 6"/>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Judgment Search Modal -->
+    <div class="modal-overlay" id="judgmentModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <path d="M14 2v6h6"/>
+                    </svg>
+                    <span>判決書查詢</span>
+                </div>
+                <button class="modal-close" onclick="closeJudgmentModal()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="judgmentSearchForm">
+                    <div class="form-group">
+                        <label class="form-label">關鍵字</label>
+                        <input type="text" class="form-input" id="judgmentKeywords" placeholder="例如：股東會決議、董事責任">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">法條（選填）</label>
+                        <input type="text" class="form-input" id="judgmentArticle" placeholder="例如：公司法第156條">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">法院層級</label>
+                            <select class="form-select" id="judgmentCourt">
+                                <option value="all">全部</option>
+                                <option value="最高法院">最高法院</option>
+                                <option value="高等法院">高等法院</option>
+                                <option value="地方法院">地方法院</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">案件類型</label>
+                            <select class="form-select" id="judgmentType">
+                                <option value="all">全部</option>
+                                <option value="民事">民事</option>
+                                <option value="刑事">刑事</option>
+                                <option value="行政">行政</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeJudgmentModal()">取消</button>
+                <button class="btn btn-primary" onclick="searchJudgments()">查詢</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Article Compare Modal -->
+    <div class="modal-overlay" id="compareModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 11l3 3L22 4"/>
+                        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+                    </svg>
+                    <span>法條對比</span>
+                </div>
+                <button class="modal-close" onclick="closeCompareModal()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="compareForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">法條 A</label>
+                            <input type="text" class="form-input" id="articleA" placeholder="例如：第156條">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">法條 B</label>
+                            <input type="text" class="form-input" id="articleB" placeholder="例如：第23條">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">對比方式</label>
+                        <select class="form-select" id="compareMode">
+                            <option value="content">內容對比</option>
+                            <option value="related">相關性分析</option>
+                            <option value="similar">相似條文查找</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeCompareModal()">取消</button>
+                <button class="btn btn-primary" onclick="compareArticles()">開始對比</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="/static/app_new.js"></script>
+</body>
+</html>
