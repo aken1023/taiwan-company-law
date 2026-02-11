@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商事法知識測試 - 20 部法律知識庫</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .status-bar {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+            display: flex;
+            gap: 24px;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #10b981;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .law-category {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .category-icon {
+            font-size: 28px;
+        }
+
+        .category-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .test-question {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+        }
+
+        .test-question:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .test-question:active {
+            transform: translateX(2px);
+        }
+
+        .question-law {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        .test-question:hover .question-law {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .question-text {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .result-area {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-top: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            min-height: 400px;
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .result-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .clear-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .clear-btn:hover {
+            background: #dc2626;
+            transform: scale(1.05);
+        }
+
+        #result {
+            color: #333;
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #667eea;
+            font-weight: 500;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f0f0f0;
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .badge-new {
+            background: #10b981;
+            color: white;
+        }
+
+        .badge-original {
+            background: #3b82f6;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏛️ 台灣商事法律知識測試系統</h1>
+            <p class="subtitle">涵蓋 20 部商事法律 608 條文 - 跨法規 AI 問答系統</p>
+            <div style="margin-top: 16px; padding: 12px; background: #d4edda; border-left: 4px solid #28a745; border-radius: 4px;">
+                <strong>✅ 已上線：</strong>系統已整合 <strong>20 部商事法律</strong>，包含公司法、證券交易法、銀行法、保險法、票據法等，支援跨法規查詢。
+            </div>
+        </header>
+
+        <div class="status-bar">
+            <div class="status-item">
+                <div class="status-dot"></div>
+                <span>AI 服務運行中</span>
+            </div>
+            <div class="status-item">
+                <span>📚 已索引文件：<strong id="docCount">-</strong></span>
+            </div>
+            <div class="status-item">
+                <span>🎯 測試問題：<strong>24</strong> 題</span>
+            </div>
+            <div class="status-item">
+                <span>⚖️ 涵蓋法律：<strong>20 部商事法</strong> (608 條)</span>
+            </div>
+        </div>
+
+        <div class="test-grid">
+            <!-- 公司設立與登記 -->
+            <div class="law-category">
+                <div class="category-header">
+                    <span class="category-icon">🏢</span>
+                    <h2 class="category-title">公司設立與登記</h2>
+                </div>
+
+                <div class="test-question" onclick="askQuestion('什麼是股份有限公司？', '公司法 - 公司類型')">
+                    <div class="question-law">公司法第2條</div>
+                    <div class="question-text">什麼是股份有限公司？</div>
+                </div>
+
+                <div class="test-question" onclick="askQuestion('設立股份有限公司需要幾個發起人？', '公司法 - 設立')">
+                    <div class="question-law">公司法第128條</div>
+                    <div class="question-text">設立股份有限公司需要幾個發起人？</div>
+                </div>
+
+                <div class="test-question" onclick="askQuestion('公司設立登記需要哪些文件？', '公司法 - 登記')">
+                    <div class="question-law">公司法第387條</div>
+                    <div class="question-text">公司設立登記需要哪些文件？</div>
+                </div>
+
+                <div class="test-question" onclick="askQuestion('有限公司與股份有限公司的差別是什麼？', '公司法 - 比較')">
+                    <div class="question-law">公司法第2條</div>
+                    <div class="question-text">有限公司與股份有限公司的差別？</div>
+                </div>
+
+                <div class="test-question" onclick="askQuestion('閉鎖性股份有限公司是什麼？', '公司法 - 閉鎖性公司')">
+                    <div class="question-law">公司法第356-1條</div>
+                    <div class="question-text">閉鎖性股份有限公司是什麼？</div>
+                </div>
+
+                <div class="test-question" onclick="askQuestion('公司名稱可以重複嗎？', '公司法 - 名稱')">
+                    <div class="question-law">公司法第18條</div>
+                    <div class="question-text">公司名稱可以重複嗎？</div>
+                </div>
+            </div>
+
+            <!-- 股東權益 -->
+            <div class="law-category">
+                <div class="category-header">
+                    <span class="category-icon">👥</span>
+                    <h2 class="category-title">股東權益</h2>
+                </div>
+
+                <div class="test-question" onclick="askQuestion('股東會有哪些職權？', '公司法 - 股東會')">
+                    <div class="question-law">公司法第202條</div>
+                    <div class="question-text">股東會有哪些職權？</div>
+                </div>
+
+                <div class="test-question" onclick="askQuestion('股東可以查閱公司帳簿嗎？', '公司法 - 檢查權')">
+                    <div class="question-law">公司法第245條</div>
+                    <div class="question-text">股東可以查閱公司帳簿嗎？</div>
+                </div>
+
+                <div class="test-question" onclick="askQuestion('股東會決議如何才有效？', '公司法 - 決議')">
+                    <div class="question-law">公司法第174條</div>
+                    <div class="question-text">股東會決議如何才有效？</div>
+                </div>
+
+                <div class="test-question" onclick="askQuestion('少數股東可以請求召開股東會嗎？', '公司法 - 少數股東權')">
+                    <div class="question-law">公司法第173條</div>
+                    <div class="question-text">少數股東可以請求召開股東會嗎？</div>
+                </div>
+
+                <div class="test-question" onclick="askQuestion('股東對董事會決議不滿可以怎麼做？', '公司法 - 股東權利')">
+                    <div class="question-law">公司法第189條</div>
+                    <div class="question-text">股東對董事會決議不滿可以怎麼做？</div>
+                </div>
+
+                <div class="test-question" onclick="askQuestion('股票可以自由轉讓嗎？', '公司法 - 股份轉讓')">
+                    <div class="question-law">公司法第163條</div>
+                    <div class="question-text">股票可以自由轉讓嗎？</div>
+                </div>
+            </div>
+
+            <!-- 董監事責任 -->
+            <div class="law-category">
+                <div class="category-header">
+                    <span class="category-icon">👔</span>
+                    <h2 class="category-title">董監事責任</h2>
+                </div>
+
+                <div class="test-question" onclick="askQuestion('董事對公司有什麼責任？', '公司法 - 董事責任')">
+                    <div class="question-law">公司法第23條</div>
+                    <div class="question-text">董事對公司有什麼責任？</div>
+                </div>
+
+                <div class="test-question" onclick="askQuestion('公司法第156條在規範什麼？', '公司法 - 資本三原則')">
+                    <div class="question-law">公司法第156條</div>
+                    <div class="question-text">公司法第156條在規範什麼？</div>
+                </div>
+
+                <div class="test-question" onclick="askQuestion('董事有利益衝突時應該怎麼做？', '公司法 - 利益衝突')">
+                    <div class="question-law">公司法第223條</div>
+                    <div class="question-text">董事有利益衝突時應該怎麼做？</div>
+                </div>
+
+                <div class="test-question" onclick="askQuestion('董事會如何召集？', '公司法 - 董事會')">
+                    <div class="question-law">公司法第204條</div>
+                    <div class="question-text">董事會如何召集？</div>
+                </div>
+
+                <div class="test-question" onclick="askQuestion('監察人有哪些職權？', '公司法 - 監察人')">
+                    <div class="question-law">公司法第218條</div>
+                    <div class="question-text">監察人有哪些職權？</div>
+                </div>
+
+                <div class="test-question" onclick="askQuestion('獨立董事和一般董事有什麼不同？', '公司法 - 獨立董事')">
+                    <div class="question-law">公司法第192-1條</div>
+                    <div class="question-text">獨立董事和一般董事有什麼不同？</div>
+                </div>
+            </div>
+
+            <!-- 公司重整與清算 -->
+            <div class="law-category">
+                <div class="category-header">
+                    <span class="category-icon">⚖️</span>
+                    <h2 class="category-title">公司重整與清算</h2>
+                </div>
+
+                <div class="test-question" onclick="askQuestion('公司何時需要解散？', '公司法 - 解散')">
+                    <div class="question-law">公司法第315條</div>
+                    <div class="question-text">公司何時需要解散？</div>
+                </div>
+
+                <div class="test-question" onclick="askQuestion('公司清算程序是什麼？', '公司法 - 清算')">
+                    <div class="question-law">公司法第322條</div>
+                    <div class="question-text">公司清算程序是什麼？</div>
+                </div>
+
+                <div class="test-question" onclick="askQuestion('公司可以合併嗎？需要什麼程序？', '公司法 - 合併')">
+                    <div class="question-law">公司法第316條</div>
+                    <div class="question-text">公司可以合併嗎？需要什麼程序？</div>
+                </div>
+
+                <div class="test-question" onclick="askQuestion('公司分割是什麼？', '公司法 - 分割')">
+                    <div class="question-law">公司法第319條</div>
+                    <div class="question-text">公司分割是什麼？</div>
+                </div>
+
+                <div class="test-question" onclick="askQuestion('公司重整和破產有什麼不同？', '公司法 - 重整')">
+                    <div class="question-law">公司法第282條</div>
+                    <div class="question-text">公司重整和破產有什麼不同？</div>
+                </div>
+
+                <div class="test-question" onclick="askQuestion('外國公司可以在台灣營業嗎？', '公司法 - 外國公司')">
+                    <div class="question-law">公司法第371條</div>
+                    <div class="question-text">外國公司可以在台灣營業嗎？</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="result-area">
+            <div class="result-header">
+                <h3 class="result-title">📋 測試結果</h3>
+                <button class="clear-btn" onclick="clearResult()">清除結果</button>
+            </div>
+            <div id="result">點擊上方任一問題開始測試...</div>
+        </div>
+    </div>
+
+    <script>
+        // 獲取狀態
+        fetch('/api/status')
+            .then(r => r.json())
+            .then(data => {
+                document.getElementById('docCount').textContent = data.indexed_docs;
+            });
+
+        async function askQuestion(question, lawName) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <span>正在查詢「${lawName}」相關知識...</span>
+                </div>
+                <div style="margin-top: 16px; padding: 16px; background: #f8f9fa; border-radius: 8px;">
+                    <strong>測試問題：</strong>${question}<br>
+                    <strong>涵蓋法律：</strong>${lawName}
+                </div>
+            `;
+
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: question,
+                        mode: 'ai',
+                        history: []
+                    })
+                });
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let answer = '';
+
+                resultDiv.innerHTML = `
+                    <div style="margin-bottom: 16px; padding: 16px; background: #f8f9fa; border-radius: 8px;">
+                        <strong>📌 測試問題：</strong>${question}<br>
+                        <strong>⚖️ 涵蓋法律：</strong>${lawName}
+                    </div>
+                    <div style="padding: 16px; background: #fff; border-left: 4px solid #667eea;">
+                        <strong>🤖 AI 回答：</strong><br><br>
+                        <div id="answer"></div>
+                    </div>
+                `;
+
+                const answerDiv = document.getElementById('answer');
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+
+                    const chunk = decoder.decode(value);
+                    const lines = chunk.split('\n');
+
+                    for (const line of lines) {
+                        if (line.startsWith('data: ')) {
+                            const data = line.slice(6);
+                            if (data === '[DONE]') continue;
+                            answer += data;
+                            answerDiv.textContent = answer;
+                        }
+                    }
+                }
+
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div style="color: #ef4444; padding: 16px; background: #fee; border-radius: 8px;">
+                        ❌ 錯誤：${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        function clearResult() {
+            document.getElementById('result').textContent = '點擊上方任一問題開始測試...';
+        }
+    </script>
+</body>
+</html>

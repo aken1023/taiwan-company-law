@@ -62,6 +62,7 @@ def format_hit(hit):
         "path": hit.get("path", ""),
         "title": hit.get("title", ""),
         "score": round(hit.score, 2) if hasattr(hit, 'score') else 0,
+        "law_name": hit.get("law_name", ""),  # 新增：法律名稱
     }
 
     if doc_type == "article":

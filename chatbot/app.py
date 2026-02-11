@@ -20,7 +20,7 @@ SCRIPTS_PATH = SKILL_PATH / "scripts"
 app = Flask(__name__)
 
 KB_ROOT = Path(__file__).resolve().parent.parent
-INDEX_DIR = Path(__file__).resolve().parent / "index_data"
+INDEX_DIR = Path(__file__).resolve().parent / "multi_law_index"  # 使用多法規索引
 
 
 @app.route("/")
@@ -33,6 +33,12 @@ def home():
 def home_classic():
     """Classic UI (Simple and focused)"""
     return render_template("index.html")
+
+
+@app.route("/test")
+def test_commercial_law():
+    """Test page for 20 commercial laws"""
+    return render_template("test_commercial_law.html")
 
 
 @app.route("/api/status")
@@ -284,15 +290,16 @@ def api_chat():
 
 if __name__ == "__main__":
     print("=" * 50)
-    print("  公司法知識庫聊天機器人")
+    print("  台灣商事法律知識庫聊天機器人")
+    print("  涵蓋 20 部商事法律")
     print("=" * 50)
 
     ix = get_index(INDEX_DIR)
     if ix is None or ix.doc_count() == 0:
-        print("\n正在建立搜尋索引...")
-        build_index(KB_ROOT, INDEX_DIR)
-        ix = get_index(INDEX_DIR)
-        print(f"索引建立完成，共 {ix.doc_count()} 個文件")
+        print("\n索引未建立，請先執行: python ../build_multi_law_index.py")
+        print("或使用舊版單一法規模式")
+        import sys
+        sys.exit(1)
     else:
         print(f"已載入索引，共 {ix.doc_count()} 個文件")
 

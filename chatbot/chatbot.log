@@ -1,0 +1,109 @@
+C:\Users\aken1\AppData\Roaming\Python\Python313\site-packages\jieba\_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+==================================================
+  公司法知識庫聊天機器人
+==================================================
+已載入索引，共 564 個文件
+AI 模式已啟用 (DeepSeek)
+
+開啟 http://localhost:5000
+
+ * Serving Flask app 'app'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5003
+ * Running on http://192.168.0.40:5003
+Press CTRL+C to quit
+ * Restarting with watchdog (windowsapi)
+C:\Users\aken1\AppData\Roaming\Python\Python313\site-packages\jieba\_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+ * Debugger is active!
+ * Debugger PIN: 102-291-096
+ * Detected change in 'D:\\Code\\台灣法律\\公司法\\chatbot\\app.py', reloading
+==================================================
+  公司法知識庫聊天機器人
+==================================================
+已載入索引，共 564 個文件
+AI 模式已啟用 (DeepSeek)
+
+開啟 http://localhost:5000
+
+ * Restarting with watchdog (windowsapi)
+C:\Users\aken1\AppData\Roaming\Python\Python313\site-packages\jieba\_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+ * Debugger is active!
+ * Debugger PIN: 102-291-096
+ * Detected change in 'D:\\Code\\台灣法律\\公司法\\chatbot\\indexer.py', reloading
+==================================================
+  公司法知識庫聊天機器人
+==================================================
+已載入索引，共 564 個文件
+AI 模式已啟用 (DeepSeek)
+
+開啟 http://localhost:5000
+
+ * Restarting with watchdog (windowsapi)
+C:\Users\aken1\AppData\Roaming\Python\Python313\site-packages\jieba\_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+ * Debugger is active!
+ * Debugger PIN: 102-291-096
+ * Detected change in 'D:\\Code\\台灣法律\\公司法\\chatbot\\searcher.py', reloading
+==================================================
+  公司法知識庫聊天機器人
+==================================================
+已載入索引，共 564 個文件
+AI 模式已啟用 (DeepSeek)
+
+開啟 http://localhost:5000
+
+ * Restarting with watchdog (windowsapi)
+C:\Users\aken1\AppData\Roaming\Python\Python313\site-packages\jieba\_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+ * Debugger is active!
+ * Debugger PIN: 102-291-096
+ * Detected change in 'D:\\Code\\台灣法律\\公司法\\chatbot\\searcher.py', reloading
+==================================================
+  公司法知識庫聊天機器人
+==================================================
+已載入索引，共 564 個文件
+AI 模式已啟用 (DeepSeek)
+
+開啟 http://localhost:5000
+
+ * Restarting with watchdog (windowsapi)
+C:\Users\aken1\AppData\Roaming\Python\Python313\site-packages\jieba\_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+ * Debugger is active!
+ * Debugger PIN: 102-291-096
+ * Detected change in 'D:\\Code\\台灣法律\\公司法\\chatbot\\app.py', reloading
+==================================================
+  公司法知識庫聊天機器人
+==================================================
+已載入索引，共 564 個文件
+AI 模式已啟用 (DeepSeek)
+
+開啟 http://localhost:5000
+
+ * Restarting with watchdog (windowsapi)
+C:\Users\aken1\AppData\Roaming\Python\Python313\site-packages\jieba\_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+==================================================
+  公司法知識庫聊天機器人
+==================================================
+Traceback (most recent call last):
+  File "D:\Code\台灣法律\公司法\chatbot\app.py", line 296, in <module>
+    ix = get_index(INDEX_DIR)
+  File "D:\Code\台灣法律\公司法\chatbot\indexer.py", line 250, in get_index
+    if index_dir.exists() and index.exists_in(str(index_dir)):
+                              ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\aken1\AppData\Roaming\Python\Python313\site-packages\whoosh\index.py", line 136, in exists_in
+    ix = open_dir(dirname, indexname=indexname)
+  File "C:\Users\aken1\AppData\Roaming\Python\Python313\site-packages\whoosh\index.py", line 123, in open_dir
+    return FileIndex(storage, schema=schema, indexname=indexname)
+  File "C:\Users\aken1\AppData\Roaming\Python\Python313\site-packages\whoosh\index.py", line 421, in __init__
+    TOC.read(self.storage, self.indexname, schema=self._schema)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\aken1\AppData\Roaming\Python\Python313\site-packages\whoosh\index.py", line 656, in read
+    schema = pickle.loads(stream.read_string())
+AttributeError: Can't get attribute 'JiebaTokenizer' on <module '__main__' from 'D:\\Code\\台灣法律\\公司法\\chatbot\\app.py'>

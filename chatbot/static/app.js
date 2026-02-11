@@ -65,16 +65,32 @@ async function sendMessage(query) {
     sendBtn.disabled = true;
 
     welcomeEl.style.display = 'none';
+
+    // Show original user question
     addMessage(query, 'user');
     chatInput.value = '';
+
+    // Try to refine question in AI mode
+    let refinedQuery = query;
+    let showRefinement = false;
+
+    if (currentMode === 'ai') {
+        const refineResult = await refineQuestion(query);
+        if (refineResult && refineResult.success && refineResult.refined !== query) {
+            refinedQuery = refineResult.refined;
+            showRefinement = true;
+            // Show refined question
+            addRefinedMessage(query, refinedQuery);
+        }
+    }
 
     const typingEl = addTypingIndicator();
 
     try {
         if (currentMode === 'ai') {
-            await handleAIResponse(query, typingEl);
+            await handleAIResponse(refinedQuery, typingEl);
         } else {
-            await handleSearchResponse(query, typingEl);
+            await handleSearchResponse(refinedQuery, typingEl);
         }
     } catch (error) {
         removeElement(typingEl);
@@ -84,6 +100,23 @@ async function sendMessage(query) {
     isProcessing = false;
     sendBtn.disabled = false;
     chatInput.focus();
+}
+
+// ── Refine Question ──
+async function refineQuestion(query) {
+    try {
+        const res = await fetch('/api/refine', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query }),
+        });
+
+        if (!res.ok) return null;
+        return await res.json();
+    } catch (error) {
+        console.error('Question refinement failed:', error);
+        return null;
+    }
 }
 
 // ── Search Mode ──
@@ -213,6 +246,28 @@ function addMessage(text, sender) {
     } else {
         bubble.innerHTML = text ? marked.parse(text) : '';
     }
+
+    msg.appendChild(bubble);
+    messagesEl.appendChild(msg);
+    scrollToBottom();
+    return msg;
+}
+
+function addRefinedMessage(original, refined) {
+    const msg = document.createElement('div');
+    msg.className = 'message system';
+
+    const bubble = document.createElement('div');
+    bubble.className = 'message-bubble refined-question';
+    bubble.innerHTML = `
+        <div class="refined-header">
+            <span class="refined-icon">✨</span>
+            <span class="refined-label">AI 優化問題</span>
+        </div>
+        <div class="refined-content">
+            <div class="refined-text">${escapeHtml(refined)}</div>
+        </div>
+    `;
 
     msg.appendChild(bubble);
     messagesEl.appendChild(msg);

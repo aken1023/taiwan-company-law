@@ -65,6 +65,55 @@ def build_context(results):
     return "\n\n---\n\n".join(parts)
 
 
+def refine_question(query):
+    """Refine user's question to be more precise and professional for legal search."""
+    client = get_client()
+    if not client:
+        return None
+
+    refine_prompt = """你是法律問題優化助手。請將使用者的問題改寫得更精確、專業，適合用於法律知識庫查詢。
+
+優化原則：
+1. 保持問題的核心意圖不變
+2. 使用更精確的法律術語（如：董事 vs 公司負責人、股東會 vs 股東大會）
+3. 補充可能的關鍵法律概念
+4. 去除口語化、重複或不必要的描述
+5. 如果問題太模糊，增加具體情境
+6. 保持繁體中文
+
+範例：
+- 輸入：「公司老闆要負什麼責任？」
+  輸出：「公司董事的法律責任與義務有哪些？」
+
+- 輸入：「開公司要準備什麼」
+  輸出：「公司設立的法定要件與登記程序」
+
+- 輸入：「股東可以做什麼」
+  輸出：「股東的權利與義務，包括表決權、盈餘分配權、股東會權限」
+
+請直接輸出優化後的問題，不要有其他說明文字。"""
+
+    try:
+        response = client.chat.completions.create(
+            model="deepseek-chat",
+            messages=[
+                {"role": "system", "content": refine_prompt},
+                {"role": "user", "content": query}
+            ],
+            max_tokens=200,
+            temperature=0.5,
+        )
+
+        refined = response.choices[0].message.content.strip()
+        # Remove quotes if AI wrapped the answer
+        refined = refined.strip('"\'「」')
+        return refined
+
+    except Exception as e:
+        print(f"Question refinement error: {e}")
+        return None
+
+
 def generate_ai_response(query, search_results, history=None):
     """Generate AI response using DeepSeek API with RAG. Yields JSON chunks."""
     client = get_client()
@@ -110,3 +159,50 @@ def generate_ai_response(query, search_results, history=None):
 
     except Exception as e:
         yield json.dumps({"error": f"AI 回應錯誤：{str(e)}"}, ensure_ascii=False)
+
+
+def generate_related_questions(query, ai_response):
+    """Generate related questions based on the conversation."""
+    client = get_client()
+    if not client:
+        return []
+
+    prompt = """基於使用者的問題和 AI 的回答，生成 3-5 個相關的後續問題。
+
+要求：
+1. 問題應該是自然的後續提問，幫助使用者深入了解相關主題
+2. 問題應該具體、明確，並且與台灣公司法相關
+3. 每個問題獨立成行，不要編號
+4. 問題應該多樣化，涵蓋不同角度（法律責任、實務操作、相關條文等）
+5. 使用繁體中文
+
+範例：
+使用者問題：什麼是股份有限公司？
+AI 回答：[關於股份有限公司的定義和特點...]
+
+推薦問題：
+股份有限公司的設立流程是什麼？
+股份有限公司和有限公司有什麼差別？
+股份有限公司的董事會如何組成？
+股份有限公司的股東有哪些權利？"""
+
+    try:
+        response = client.chat.completions.create(
+            model="deepseek-chat",
+            messages=[
+                {"role": "system", "content": prompt},
+                {"role": "user", "content": f"使用者問題：{query}\n\nAI 回答：{ai_response[:500]}"}
+            ],
+            max_tokens=300,
+            temperature=0.7,
+        )
+
+        questions_text = response.choices[0].message.content.strip()
+        questions = [q.strip() for q in questions_text.split('\n') if q.strip()]
+        # Remove any numbering or bullets
+        questions = [q.lstrip('0123456789.-•● ') for q in questions]
+        return questions[:5]
+
+    except Exception as e:
+        print(f"Related questions generation error: {e}")
+        return []

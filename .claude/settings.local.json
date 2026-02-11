@@ -21,7 +21,20 @@
       "Bash(else echo \"MISSING: $f\")",
       "Bash(python3:*)",
       "Bash(where:*)",
-      "Bash(git init:*)"
+      "Bash(git init:*)",
+      "Bash(git commit:*)",
+      "Bash(pip install:*)",
+      "Bash(timeout:*)",
+      "Bash(curl:*)",
+      "Bash(powershell -Command:*)",
+      "Bash(ngrok http:*)",
+      "Bash(taskkill:*)",
+      "Bash(gh auth status:*)",
+      "Bash(git rm:*)",
+      "Bash(git add:*)",
+      "Bash(gh repo create:*)",
+      "Bash(choco install:*)",
+      "Bash(cloudflared tunnel:*)"
     ]
   }
 }
